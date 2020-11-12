@@ -1,6 +1,7 @@
-from PIL import Image
 import os
 from shutil import copyfile
+
+from PIL import Image
 
 def process_thumbnail_creation(gallery_path: str):
 
