@@ -25,7 +25,7 @@
 <div>
   <ul id="images">
     {%for file in files%}
-      <li><img src="{{ url_for('thumbnails', path=folder~'/'~file) }}" /></a></li>
+      <li><img data-download-url="{{ url_for('download', path=folder~'/'~file) }}" src="{{ url_for('thumbnails', path=folder~'/'~file) }}" /></a></li>
     {%endfor%}
   </ul>
 </div>
