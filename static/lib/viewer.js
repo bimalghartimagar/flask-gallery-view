@@ -315,6 +315,11 @@
     url: 'src',
 
     /**
+     * Define where to get the image URL for downloading.
+     * @type {string | Function}
+     */
+    downloadUrl: 'data-download',
+    /**
      * Event shortcuts.
      * @type {Function}
      */
@@ -392,7 +397,7 @@
 
   var REGEXP_SPACES = /\s\s*/; // Misc
 
-  var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
+  var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical', 'download'];
 
   /**
    * Check if the given value is a string.
@@ -1092,7 +1097,9 @@
           });
           img.src = src || url;
           img.alt = alt;
+          var downloadUrl = getData(image, 'downloadUrl')
           img.setAttribute('data-original-url', url || src);
+          img.setAttribute('data-download-url', downloadUrl)
           item.setAttribute('data-index', index);
           item.setAttribute('data-viewer-action', 'view');
           item.setAttribute('role', 'button');
@@ -1398,6 +1405,10 @@
 
         case 'flip-vertical':
           this.scaleY(-imageData.scaleY || -1);
+          break;
+
+        case 'download':
+          this.download();
           break;
 
         default:
@@ -1968,6 +1979,7 @@
       var item = this.items[index];
       var img = item.querySelector('img');
       var url = getData(img, 'originalUrl');
+      var downloadUrl = getData(img, 'downloadUrl');
       var alt = img.getAttribute('alt');
       var image = document.createElement('img');
       forEach(options.inheritedAttributes, function (name) {
@@ -1979,6 +1991,7 @@
       });
       image.src = url;
       image.alt = alt;
+      setData(image, 'downloadUrl', downloadUrl);
 
       if (isFunction(options.view)) {
         addListener(element, EVENT_VIEW, options.view, {
@@ -2365,6 +2378,15 @@
       }
 
       return this;
+    },
+
+    download: function(){
+      var link = document.createElement("a");
+      var downloadUrl = getData(this.image, 'downloadUrl');
+      var splitted = downloadUrl.split('/')
+      link.download = splitted[splitted.length - 1];
+      link.href = downloadUrl;
+      link.click();
     },
 
     /**
