@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    border: 1px solid transparent;
+    float: left;
+    height: calc(100% / 3);
+    margin: 0 -1px -1px 0;
+    overflow: hidden;
+    width: 30%;
+  }
+
+  li > img {
+    cursor: zoom-in;
+    width: 100%;
+  }
+</style>
+
+<div>
+  <ul id="images">
+    {%for file in files%}
+      <li><img src="{{ url_for('thumbnails', path=folder~'/'~file) }}" /></a></li>
+    {%endfor%}
+  </ul>
+</div>
+
+<script type="text/javascript">
+window.addEventListener('DOMContentLoaded', function () {
+  const gallery = new Viewer(document.getElementById('images'));
+});
+</script>
+
+{% endblock %}
+
