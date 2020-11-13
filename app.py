@@ -20,3 +20,8 @@ def folder(folder):
 @app.route('/thumbnails/<path:path>')
 def thumbnails(path):
   return send_from_directory('thumbnails', path)
+
+@app.route('/download/<path:path>')
+def download(path):
+  gallery_path = ""
+  return send_from_directory(gallery_path, path)
