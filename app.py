@@ -1,9 +1,18 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, request
+from configparser import ConfigParser
+
+from flask import Flask, render_template, request, Response, stream_with_context
 from flask.helpers import send_from_directory
 
+import conf
+
 app = Flask(__name__)
+
+config = ConfigParser()
+config.read_dict(conf.cfg)
+  
+app.config['gallery_path'] = config.get('gallery_view', 'original_path')
 
 f = open("ip_log.txt", "a")
 
@@ -28,5 +37,4 @@ def thumbnails(path):
 @app.route('/download/<path:path>')
 def download(path):
   f.write(f"DOWNLOAD: {path} \t {request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)} \t {str(datetime.now())} \n")
-  gallery_path = ""
-  return send_from_directory(gallery_path, path)
+  return send_from_directory(app.config['gallery_path'] , path)

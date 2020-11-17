@@ -1,5 +1,7 @@
 import os
 from shutil import copyfile
+from configparser import ConfigParser
+import conf
 
 from PIL import Image
 
@@ -29,5 +31,8 @@ def process_thumbnail_creation(gallery_path: str):
         continue
 
 if __name__ == "__main__":
-  gallery_path = "C:\\Users\\Bimal\\Pictures\\test"
+  config = ConfigParser()
+  config.read_dict(conf.cfg)
+  
+  gallery_path = config.get('gallery_view', 'original_path')
   process_thumbnail_creation(gallery_path)
